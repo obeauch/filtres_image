@@ -38,12 +38,11 @@ window.addEventListener("load", () => {
 
         // console.log(lumi)
         // throw new Error("Stop")
-
+ 
         pixel.r = lumi
         pixel.g = lumi
         pixel.b = lumi
         pixel.a = pixel.a
-
 
         return {
             r: pixel.r,
@@ -54,7 +53,7 @@ window.addEventListener("load", () => {
         }
     }
 
-    function contrast(pixel, level, brightness = 0) {
+    function contrast(pixel, level, brightness) {
 
         level = 80
         brightness = 2.35
@@ -75,28 +74,50 @@ window.addEventListener("load", () => {
     }
 
 
-        
-
-
     function duotone(pixel, color_dark, color_light) {
+
+        //c1 * (1 - luminance) + c2 * luminance
+        
         
         let lumi = 0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b
-    
 
-        if(lumi<80) {
-            pixel.r = color_dark.r
-            pixel.g = color_dark.g
-            pixel.b = color_dark.b
-    
+        pixel.r = lumi
+        pixel.g = lumi
+        pixel.b = lumi
         
-        } else if(lumi>80){
-            pixel.r = color_light.r
-            pixel.g = color_light.g
-            pixel.b = color_light.b
+        let r1 = (color_dark.r*(1-0.299)+(pixel.r*0.299))
+        let g1 = (color_dark.g*(1-0.587)+(pixel.g*0.587))
+        let b1 = (color_dark.b*(1-0.114)+(pixel.b*0.114))
+
+        let r2 = (color_light.r*(1-0.299)+(pixel.r*0.299))
+        let g2 = (color_light.g*(1-0.587)+(pixel.g*0.587))
+        let b2 = (color_light.b*(1-0.114)+(pixel.b*0.114))
+
+        // console.log(r1)
+        // console.log(g1)
+        // console.log(b1)
+
+        // console.log(r2)
+        // console.log(g2)
+        // console.log(b2)
+
+        // throw new Error("Stop")
+        
+
+        if(lumi<128) {
+            pixel.r = r1
+            pixel.g = g1
+            pixel.b = b1
         }
- 
-        
+        else if(lumi>128){
+            pixel.r = r2
+            pixel.g = g2
+            pixel.b = b2
+        }
 
+        // console.log(pixel.r)
+        // throw new Error("Stop")
+ 
         return {
             r: pixel.r,
             g: pixel.g,
