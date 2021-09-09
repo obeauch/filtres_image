@@ -9,8 +9,8 @@ window.addEventListener("load", () => {
     ctx.drawImage(img, 0, 0, canvas.width, img.height/img.width*canvas.width)
     
     //apply_filter(ctx, invert)
-    //apply_filter(ctx, luminance)
-    apply_filter(ctx, contrast, 2)
+    apply_filter(ctx, luminance)
+    //apply_filter(ctx, contrast, 2)
     // apply_filter(ctx, duotone, {r:34, g:69, b:117}, {r:214, g:42, b:19})
 
     
@@ -76,7 +76,20 @@ window.addEventListener("load", () => {
 
 
     function duotone(pixel, color_dark, color_light) {
-        
+        level = 80
+        brightness = 2.35
+
+        pixel.r = (pixel.r - level) * brightness
+        pixel.g = (pixel.g - level) * brightness
+        pixel.b = (pixel.b - level) * brightness
+        pixel.a = pixel.a
+    }
+    return {
+        r: pixel.r,
+        g: pixel.g,
+        b: pixel.b,
+        a: pixel.a,
+
     }
 
 })
