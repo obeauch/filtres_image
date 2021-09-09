@@ -9,9 +9,9 @@ window.addEventListener("load", () => {
     ctx.drawImage(img, 0, 0, canvas.width, img.height/img.width*canvas.width)
     
     //apply_filter(ctx, invert)
-    apply_filter(ctx, luminance)
+    //apply_filter(ctx, luminance)
     //apply_filter(ctx, contrast, 2)
-    // apply_filter(ctx, duotone, {r:34, g:69, b:117}, {r:214, g:42, b:19})
+    apply_filter(ctx, duotone, {r:34, g:69, b:117}, {r:214, g:42, b:19})
 
     
     // L'inverse d'une couleur est égal 
@@ -35,6 +35,9 @@ window.addEventListener("load", () => {
     
     function luminance(pixel) {
        let lumi = 0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b
+
+        // console.log(lumi)
+        // throw new Error("Stop")
 
         pixel.r = lumi
         pixel.g = lumi
@@ -76,20 +79,31 @@ window.addEventListener("load", () => {
 
 
     function duotone(pixel, color_dark, color_light) {
-        level = 80
-        brightness = 2.35
+        
+        let lumi = 0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b
+    
 
-        pixel.r = (pixel.r - level) * brightness
-        pixel.g = (pixel.g - level) * brightness
-        pixel.b = (pixel.b - level) * brightness
-        pixel.a = pixel.a
-    }
-    return {
-        r: pixel.r,
-        g: pixel.g,
-        b: pixel.b,
-        a: pixel.a,
+        if(lumi<80) {
+            pixel.r = color_dark.r
+            pixel.g = color_dark.g
+            pixel.b = color_dark.b
+    
+        
+        } else if(lumi>80){
+            pixel.r = color_light.r
+            pixel.g = color_light.g
+            pixel.b = color_light.b
+        }
+ 
+        
 
+        return {
+            r: pixel.r,
+            g: pixel.g,
+            b: pixel.b,
+            a: pixel.a,
+
+        }
     }
 
 })
