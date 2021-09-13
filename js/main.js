@@ -36,9 +36,6 @@ window.addEventListener("load", () => {
     function luminance(pixel) {
        let lumi = 0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b
 
-        // console.log(lumi)
-        // throw new Error("Stop")
- 
         pixel.r = lumi
         pixel.g = lumi
         pixel.b = lumi
@@ -93,14 +90,6 @@ window.addEventListener("load", () => {
             pixel.b = tableau_gris[2]
         }
 
-        // pixel.a = pixel.a
-        
-        // console.log(pixel.r)
-        // console.log(pixel.g)
-        // console.log(pixel.b)
-        // console.log (tableau_gris)
-        // throw new Error("Stop")
-
 
         /**
          *  trouver la différence entre les pixels r,g,b de la couleur foncé 
@@ -112,7 +101,7 @@ window.addEventListener("load", () => {
 
 
         /**
-         * séparer la différence (differ_) en 255
+         * séparer la différence (differ_) en 256
          */
         let dR = differ_r/256
         let dG = differ_g/256
@@ -123,7 +112,8 @@ window.addEventListener("load", () => {
         let tab_couleur_b = []
 
         /**
-         * Différence que j'applique à la couleur foncé ce qui me donne 255 teintes entre la couleur foncé et la couleur pâle.
+         * Différence que j'additionne ou soustrait au canal rouge de ma couleur 1 ce qui me donne 254 teintes entre la couleur 1 et la couleur 2.
+         * Sima 
          */
         function coul_r(){
             
@@ -145,7 +135,10 @@ window.addEventListener("load", () => {
             return tab_couleur_r[pixel.r]
 
         }
-
+        
+        /**
+         * Même chose pour le canal vert
+         */
         function coul_g() {
             
             if(color_dark.g < color_light.g){
@@ -166,7 +159,9 @@ window.addEventListener("load", () => {
             return tab_couleur_g[pixel.g]
         }
 
-
+        /**
+         * Même chose pour le canal bleu
+         */
         function coul_b() {
             
             if(color_dark.b < color_light.b){
@@ -188,7 +183,9 @@ window.addEventListener("load", () => {
 
         }
 
-
+        /**
+         * J'applique au pixel la nouvelle couleur foncé (ou couleur 1).
+         */
         pixel.r = coul_r(color_dark.r)
         pixel.g = coul_g(color_dark.g)
         pixel.b = coul_b(color_dark.b)
