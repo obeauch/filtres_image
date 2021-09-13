@@ -79,44 +79,113 @@ window.addEventListener("load", () => {
         //c1 * (1 - luminance) + c2 * luminance
         
         
-        let lumi = 0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b
+        // convertir en niveaux de gris
+        let lumi = Math.round(0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b)
 
-        pixel.r = lumi
-        pixel.g = lumi
-        pixel.b = lumi
-        
-        let r1 = (color_dark.r*(1-0.299)+(pixel.r*0.299))
-        let g1 = (color_dark.g*(1-0.587)+(pixel.g*0.587))
-        let b1 = (color_dark.b*(1-0.114)+(pixel.b*0.114))
+        let tableau_gris = []
 
-        let r2 = (color_light.r*(1-0.299)+(pixel.r*0.299))
-        let g2 = (color_light.g*(1-0.587)+(pixel.g*0.587))
-        let b2 = (color_light.b*(1-0.114)+(pixel.b*0.114))
-
-        // console.log(r1)
-        // console.log(g1)
-        // console.log(b1)
-
-        // console.log(r2)
-        // console.log(g2)
-        // console.log(b2)
-
-        // throw new Error("Stop")
-        
-
-        if(lumi<128) {
-            pixel.r = r1
-            pixel.g = g1
-            pixel.b = b1
-        }
-        else if(lumi>128){
-            pixel.r = r2
-            pixel.g = g2
-            pixel.b = b2
+        // Placer les valeurs de gris de chaque pixel (r,v,b) dans un tableau
+        for(i=0; i<3; i++){
+            tableau_gris.push(lumi)
+            pixel.r = tableau_gris[0]
+            pixel.g = tableau_gris[1]
+            pixel.b = tableau_gris[2]
         }
 
+        // pixel.a = pixel.a
+        
         // console.log(pixel.r)
+        // console.log(pixel.g)
+        // console.log(pixel.b)
+        // console.log (tableau_gris)
         // throw new Error("Stop")
+
+
+        /**
+         *  trouver la différence entre les pixels r,g,b de la couleur foncé 
+            par rapport à la couleur pâle.
+         */
+        differ_r = Math.sqrt((color_dark.r - color_light.r) * (color_dark.r - color_light.r))
+        differ_g = Math.sqrt((color_dark.g - color_light.g) * (color_dark.g - color_light.g))
+        differ_b = Math.sqrt((color_dark.b - color_light.b) * (color_dark.b - color_light.b))
+
+
+        /**
+         * séparer la différence (differ_) en 255 teintes
+         */
+        let dR = differ_r/255
+        let dG = differ_g/255
+        let dB = differ_b/255
+
+        let tab_couleur_r = []
+        let tab_couleur_g = []
+        let tab_couleur_b = []
+        
+
+        /**
+         * Ajouter ou réduire la teinte de couleur foncé canal rouge (color_dark.r) jusqu'à la couleur pâle canal rouge (color_light.r) pour obtenir 255 teintes entre les 2. 
+         */
+        for(let i = color_dark.r; i<=color_light.r;i+=dR){
+           if(color_dark.r < color_light.r){
+               Math.round(color_dark.r + dR)
+               tab_couleur_r.push(i)
+            //    console.log(tab_couleur_r)
+           } else {
+                Math.round(color_dark.r - dR)
+                tab_couleur_r.push(i)
+                // console.log(tab_couleur_r)
+           }
+        }
+
+
+        /**
+         * Même chose pour le canal vert
+         */
+        for(let j = color_dark.g; j>=color_light.g;j-=dG){
+           if(color_dark.g < color_light.g){
+               Math.round(color_dark.g + dG)
+               tab_couleur_g.push(j)
+            //    console.log(tab_couleur_g)
+           } else {
+                Math.round(color_dark.g - dG)
+                tab_couleur_g.push(j)
+                // console.log(tab_couleur_g)
+           }
+        }
+
+        /**
+         * Même chose pour le bleu
+         */
+        for(let k = color_dark.b; k>=color_light.b;k-=dB){
+           if(color_dark.b < color_light.b){
+               Math.round(color_dark.b + dB)
+               tab_couleur_b.push(k)
+            //    console.log(tab_couleur_b)
+           } else {
+            Math.round(color_dark.b - dB)
+            tab_couleur_b.push(k)
+            // console.log(tab_couleur_b)
+           }
+        }
+
+        /**
+         * Appliquer au pixel, la couleur du tableau_couleur correspondant au gris du pixel appliqué plus haut
+         */
+        pixel.r = tab_couleur_r[pixel.r]
+        pixel.g = tab_couleur_g[pixel.g]
+        pixel.b = tab_couleur_b[pixel.b]
+    
+        // console.log(differ_r)
+        // console.log(differ_g)
+        // console.log(differ_b)
+        // console.log(tab_couleurs[0])
+        // console.log(tab_couleurs[1])
+        // console.log(tab_couleurs[2])
+        // console.log(pixel.r)
+        // console.log(pixel.g)
+        // console.log(pixel.b)
+        // throw new Error("Stop")
+
  
         return {
             r: pixel.r,
@@ -128,6 +197,3 @@ window.addEventListener("load", () => {
     }
 
 })
-
-        // console.log(pixel.b)
-        // throw new Error("Stop")
