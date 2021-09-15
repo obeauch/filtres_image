@@ -11,7 +11,7 @@ window.addEventListener("load", () => {
     //apply_filter(ctx, invert)
     //apply_filter(ctx, luminance)
     //apply_filter(ctx, contrast, 2)
-    apply_filter(ctx, duotone, {r:34, g:69, b:117}, {r:214, g:42, b:19})
+    apply_filter(ctx, duotone, {r:64, g:29, b:11}, {r:114, g:242, b:219})
 
     
     // L'inverse d'une couleur est égal 
@@ -32,7 +32,6 @@ window.addEventListener("load", () => {
         }
     }
 
-    
     function luminance(pixel) {
        let lumi = 0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b
 
@@ -70,8 +69,6 @@ window.addEventListener("load", () => {
         }
     }
 
-
-    
     function duotone(pixel, color_dark, color_light) {
 
         //c1 * (1 - luminance) + c2 * luminance
@@ -92,7 +89,7 @@ window.addEventListener("load", () => {
 
 
         /**
-         *  trouver la différence entre les pixels r,g,b de la couleur foncé 
+         *  trouver la différence (en positif) entre les pixels r,g,b de la couleur foncé 
             par rapport à la couleur pâle.
          */
         differ_r = Math.sqrt((color_dark.r - color_light.r) * (color_dark.r - color_light.r))
@@ -121,19 +118,14 @@ window.addEventListener("load", () => {
                 for(let i = color_dark.r; i<=color_light.r;i+=dR){
                     Math.floor(color_dark.r + dR)
                     tab_couleur_r.push(i)
-                   
-                    //    console.log(tab_couleur_r)
                 } 
             }else if(color_dark.r > color_light.r) {
                 for(let i = color_dark.r; i>=color_light.r;i-=dR){
                     Math.ceil(color_dark.r - dR)
                     tab_couleur_r.push(i)
-                    
-                    //    console.log(tab_couleur_r)
                 } 
             }
             return tab_couleur_r[pixel.r]
-
         }
         
         /**
@@ -145,15 +137,11 @@ window.addEventListener("load", () => {
                 for(let j = color_dark.g; j<=color_light.g;j+=dG){
                     Math.floor(color_dark.g + dG)
                     tab_couleur_g.push(j)
-                    
-                    //    console.log(tab_couleur_g)
                 } 
             }else if (color_dark.g > color_light.g){
                 for(let j = color_dark.g; j>=color_light.g; j-=dG){
                     Math.ceil(color_dark.g - dG)
                     tab_couleur_g.push(j)
-                    
-                    //    console.log(tab_couleur_g)
                 } 
             }
             return tab_couleur_g[pixel.g]
@@ -168,19 +156,14 @@ window.addEventListener("load", () => {
                 for(let k = color_dark.b; k<=color_light.b; k+=dB){
                     Math.floor(color_dark.b + dB)
                     tab_couleur_b.push(k)
-                    
-                    //    console.log(tab_couleur_b)
                 } 
             }else if(color_dark.b > color_light.b) {
                 for(let k = color_dark.b; k>=color_light.b;k-=dB){
                     Math.ceil(color_dark.b - dB)
                     tab_couleur_b.push(k)
-                    
-                    //    console.log(tab_couleur_b)
                 } 
             }
             return tab_couleur_b[pixel.b]
-
         }
 
         /**
